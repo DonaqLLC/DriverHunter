@@ -394,9 +394,12 @@ namespace DriverHunter
 					}else
 					{
 						DWORD errCode = GetLastError();
-						if(errCode == 0x02)
+						if(errCode == ERROR_FILE_NOT_FOUND)
 						{
-							MessageBox::Show(String::Format("The {0} driver ({1}) was not found.\r\n\r\nPerhaps it was previously removed?!", drv->Description, drv->InfFile, errCode), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+							MessageBox::Show(String::Format("The {0} driver ({1}) was not found.\r\n\r\nPerhaps it was previously removed?!", drv->Description, drv->InfFile), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+						}else if(errCode == ERROR_ACCESS_DENIED)
+						{
+							MessageBox::Show(String::Format("You must run as Administrator to remove the {0} driver ({1}).", drv->Description, drv->InfFile), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 						}else
 						{
 							MessageBox::Show(String::Format("The {0} driver ({1}) could NOT be removed: Error 0x{2:X8}\r\n\r\nThis tool must be run as administrator!", drv->Description, drv->InfFile, errCode), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
